@@ -14,7 +14,7 @@ const templates = {
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: #e0e0e0;
+    background-color: var(--secondary-color, #e0e0e0);
     box-sizing: border-box;
     padding: 0 8px;
 }
@@ -40,7 +40,7 @@ const templates = {
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: #e0e0e0;
+    background-color: var(--secondary-color, #e0e0e0);
     box-sizing: border-box;
     padding: 0 4px;
 }
