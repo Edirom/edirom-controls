@@ -16,7 +16,7 @@ const templates = {
     height: 100%;
     background-color: var(--secondary-color, #e0e0e0);
     box-sizing: border-box;
-    padding: 0 8px;
+    padding: var(--control-bar-padding, 0 8px);
 }
 
 </style>
@@ -42,7 +42,7 @@ const templates = {
     height: 100%;
     background-color: var(--secondary-color, #e0e0e0);
     box-sizing: border-box;
-    padding: 0 4px;
+    padding: var(--control-bar-padding, 0 4px);
 }
 
 </style>
