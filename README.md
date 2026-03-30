@@ -4,9 +4,43 @@ This repository collects web components that are used to control views in the Ed
 
 - `edirom-control-bar` — a wrapper web component for different constellations of control elements.
 - different control elements in the form of small web components:
+  - `edirom-button-widget` — a square icon button widget for use inside a control bar.
   - `edirom-spacer-widget` — a layout helper that fills available space between control widgets.
-  - `edirom-lock-subset-control-widget`
-  - `edirom-navigation-control-widget`
+
+---
+
+## `edirom-button-widget`
+
+A square icon button for use inside an `edirom-control-bar`. It renders an `edirom-icon` (from `edirom-core-web-components`) centred inside a rounded container. The element maintains a 1:1 aspect ratio and fills the full height of its parent.
+
+### Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `icon-name` | string | — | The icon identifier passed to the internal `edirom-icon` component. |
+
+### CSS Custom Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--secondary-color` | `#ffffff00` (transparent) | Background colour of the button inner container. |
+| `--button-widget-padding` | `2px` | Padding inside the button inner container. |
+
+### Usage
+
+```html
+<script type="module" src="edirom-button-widget.js"></script>
+
+<!-- Standalone -->
+<edirom-button-widget icon-name="arrow-left"></edirom-button-widget>
+
+<!-- Inside a control bar -->
+<edirom-control-bar gap="8px">
+  <edirom-button-widget icon-name="arrow-left"></edirom-button-widget>
+  <edirom-spacer-widget></edirom-spacer-widget>
+  <edirom-button-widget icon-name="arrow-right"></edirom-button-widget>
+</edirom-control-bar>
+```
 
 ---
 
