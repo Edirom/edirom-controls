@@ -13,11 +13,25 @@ This repository collects web components that are used to control views in the Ed
 
 A square icon button for use inside an `edirom-control-bar`. It renders an `edirom-icon` (from `edirom-core-web-components`) centred inside a rounded container. The element maintains a 1:1 aspect ratio and fills the full height of its parent.
 
+The button operates as a **state carousel**: it holds a list of named states (each with an associated icon), displays the icon of the current state, and on each click dispatches a request for the *next* state without advancing itself. The calling application is responsible for setting the new `current-state` attribute in response to that event.
+
 ### Attributes
 
 | Attribute | Type | Default | Description |
 |---|---|---|---|
-| `icon-name` | string | — | The icon identifier passed to the internal `edirom-icon` component. |
+| `states-data` | JSON string (array) | `'[]'` | Stringified array of state objects. Each object must have a `name` (string) and an `iconName` (string) key. The array order defines the carousel sequence. |
+| `current-state` | string | — | The `name` of the active state. When set, the button renders the corresponding icon. If the name is not found in `states-data`, an error is logged and the button does not update. If absent, the button renders with an empty icon. |
+
+**State object shape:**
+```json
+{ "name": "unlocked", "iconName": "lock_open" }
+```
+
+### Events
+
+| Event | `bubbles` | `composed` | `detail` | Description |
+|---|---|---|---|---|
+| `button-state-requested` | ✅ | ✅ | `{ requestedState: string }` | Fired on click. `requestedState` is the `name` of the next state in carousel order. The component does **not** change state on its own — set `current-state` externally to confirm the transition. |
 
 ### CSS Custom Properties
 
@@ -31,14 +45,31 @@ A square icon button for use inside an `edirom-control-bar`. It renders an `edir
 ```html
 <script type="module" src="edirom-button-widget.js"></script>
 
-<!-- Standalone -->
-<edirom-button-widget icon-name="arrow-left"></edirom-button-widget>
+<!-- Two-state lock toggle -->
+<edirom-button-widget
+  states-data='[{"name":"unlocked","iconName":"lock_open"},{"name":"locked","iconName":"lock_closed"}]'
+  current-state="unlocked">
+</edirom-button-widget>
+
+<!-- Handling the state-change request externally -->
+<script>
+  const btn = document.querySelector('edirom-button-widget');
+  btn.addEventListener('button-state-requested', (e) => {
+      btn.setAttribute('current-state', e.detail.requestedState);
+  });
+</script>
 
 <!-- Inside a control bar -->
 <edirom-control-bar gap="8px">
-  <edirom-button-widget icon-name="arrow-left"></edirom-button-widget>
+  <edirom-button-widget
+    states-data='[{"name":"play","iconName":"play"},{"name":"pause","iconName":"pause"}]'
+    current-state="play">
+  </edirom-button-widget>
   <edirom-spacer-widget></edirom-spacer-widget>
-  <edirom-button-widget icon-name="arrow-right"></edirom-button-widget>
+  <edirom-button-widget
+    states-data='[{"name":"unlocked","iconName":"lock_open"},{"name":"locked","iconName":"lock_closed"}]'
+    current-state="unlocked">
+  </edirom-button-widget>
 </edirom-control-bar>
 ```
 
