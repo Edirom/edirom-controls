@@ -5,6 +5,7 @@ This repository collects web components that are used to control views in the Ed
 - `edirom-control-bar` — a wrapper web component for different constellations of control elements.
 - different control elements in the form of small web components:
   - `edirom-button-widget` — a square icon button widget for use inside a control bar.
+  - `edirom-spin-box-widget` — a step navigator with previous/next buttons and a text input.
   - `edirom-spacer-widget` — a layout helper that fills available space between control widgets.
 
 ---
@@ -149,6 +150,87 @@ A layout helper that expands to fill available space in the flex row of an `edir
 <edirom-control-bar gap="8px">
   <edirom-spacer-widget grow="2"></edirom-spacer-widget>
   <edirom-button>Skewed right</edirom-button>
+  <edirom-spacer-widget></edirom-spacer-widget>
+</edirom-control-bar>
+```
+
+---
+
+## `edirom-spin-box-widget`
+
+A step navigator for use inside an `edirom-control-bar`. It displays a text input flanked by a previous (`eo_previous`) and a next (`eo_next`) icon button. The user can step through a predefined list of values by clicking the icons or by typing a value into the text field and pressing Enter.
+
+Like `edirom-button-widget`, this component follows an **external-state-only** pattern: clicking a button or submitting a text value dispatches a request event but does **not** change the current step. The host application must set the `current-step` attribute in response to validate and confirm the transition.
+
+### Attributes
+
+| Attribute | Type | Default | Description |
+|---|---|---|---|
+| `steps-data` | JSON string (array) | `'[]'` | Stringified array of step values. Each element can be a string or an integer (e.g. `'["Step 1", 2, "5", 100]'`). The array order defines the navigation sequence. All values are compared as strings internally. |
+| `current-step` | string | — | The value of the active step. Must match a value in `steps-data` when compared as a string (e.g. set `"2"` to match the integer `2`). If the value is not found, a warning is logged and the display is not updated. When `steps-data` contains duplicate values, the occurrence nearest to the previously resolved index is selected (first occurrence on initial load). |
+| `carrousel` | `"true"` \| `"false"` | `"false"` | When `"true"`, navigation wraps around: stepping past the last value continues at the first, and vice versa. When `"false"`, the previous button is hidden at the first step and the next button is hidden at the last step. |
+
+### Events
+
+| Event | `bubbles` | `composed` | `detail` | Description |
+|---|---|---|---|---|
+| `spin-box-step-requested` | ✅ | ✅ | `{ requestedStep: string }` | Fired when the user clicks a navigation icon or submits a valid value via the text input (Enter key). `requestedStep` is the string value of the target step. The component does **not** change step on its own — set `current-step` externally to confirm the transition. If the user types a value not present in `steps-data`, no event is fired and the input reverts to the current step. |
+
+### CSS Custom Properties
+
+| Property | Default | Description |
+|---|---|---|
+| `--spin-box-input-width` | `4ch` | Width of the text input field. |
+| `--spin-box-gap` | `0` | Gap between the previous icon, text input, and next icon. |
+| `--spin-box-border-color` | `#ccc` | Border colour of the text input. |
+| `--spin-box-border-radius` | `4px` | Border radius of the text input. |
+| `--spin-box-input-padding` | `0 2px` | Padding inside the text input. |
+
+### Usage
+
+```html
+<script type="module" src="edirom-spin-box-widget.js"></script>
+
+<!-- Basic step navigation -->
+<edirom-spin-box-widget
+  steps-data='["Schritt 1", 2, "5", 100, "another string"]'
+  current-step="Schritt 1">
+</edirom-spin-box-widget>
+
+<!-- Handling the step-change request externally -->
+<script>
+  const spin = document.querySelector('edirom-spin-box-widget');
+  spin.addEventListener('spin-box-step-requested', (e) => {
+      spin.setAttribute('current-step', e.detail.requestedStep);
+  });
+</script>
+
+<!-- Carrousel mode -->
+<edirom-spin-box-widget
+  steps-data='["A", "B", "C"]'
+  current-step="A"
+  carrousel="true">
+</edirom-spin-box-widget>
+
+<!-- Custom input width -->
+<style>
+  .wide-spin-box {
+    --spin-box-input-width: 10ch;
+  }
+</style>
+<edirom-spin-box-widget
+  class="wide-spin-box"
+  steps-data='["Largo", "Andante", "Allegro", "Presto"]'
+  current-step="Andante">
+</edirom-spin-box-widget>
+
+<!-- Inside a control bar -->
+<edirom-control-bar gap="8px">
+  <edirom-spacer-widget></edirom-spacer-widget>
+  <edirom-spin-box-widget
+    steps-data='[1, 2, 3, 4, 5]'
+    current-step="1">
+  </edirom-spin-box-widget>
   <edirom-spacer-widget></edirom-spacer-widget>
 </edirom-control-bar>
 ```
