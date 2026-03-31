@@ -78,6 +78,8 @@ class SpinBoxWidgetElement extends HTMLElement {
                 align-items: center;
                 height: 100%;
                 gap: var(--spin-box-gap, 0);
+                background-color: var(--primary-color, #ffffff00);
+                border-radius: 4px;
             }
             .nav-icon {
                 height: 100%;
