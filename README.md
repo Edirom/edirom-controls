@@ -169,6 +169,7 @@ Like `edirom-button-widget`, this component follows an **external-state-only** p
 | `steps-data` | JSON string (array) | `'[]'` | Stringified array of step values. Each element can be a string or an integer (e.g. `'["Step 1", 2, "5", 100]'`). The array order defines the navigation sequence. All values are compared as strings internally. |
 | `current-step` | string | — | The value of the active step. Must match a value in `steps-data` when compared as a string (e.g. set `"2"` to match the integer `2`). If the value is not found, a warning is logged and the display is not updated. When `steps-data` contains duplicate values, the occurrence nearest to the previously resolved index is selected (first occurrence on initial load). |
 | `carrousel` | `"true"` \| `"false"` | `"false"` | When `"true"`, navigation wraps around: stepping past the last value continues at the first, and vice versa. When `"false"`, the previous button is hidden at the first step and the next button is hidden at the last step. |
+| `label` | string | — | Optional short label rendered above the text input in a small font (~60% of the host font size). The label is left-aligned and truncated with an ellipsis (`…`) when it is wider than the input field. When set to a non-empty string, the input shrinks to 75% of the component height and its font size is reduced to 75% to leave room for the label. When absent or empty, the input occupies the full height and font size (no visual change). |
 
 ### Events
 
@@ -222,6 +223,13 @@ Like `edirom-button-widget`, this component follows an **external-state-only** p
   class="wide-spin-box"
   steps-data='["Largo", "Andante", "Allegro", "Presto"]'
   current-step="Andante">
+</edirom-spin-box-widget>
+
+<!-- With a label above the input -->
+<edirom-spin-box-widget
+  steps-data='[1, 2, 3, 4, 5]'
+  current-step="1"
+  label="Annotationen">
 </edirom-spin-box-widget>
 
 <!-- Inside a control bar -->

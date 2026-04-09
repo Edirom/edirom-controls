@@ -8,10 +8,11 @@ class SpinBoxWidgetElement extends HTMLElement {
         this._currentStep = null;
         this._currentIndex = -1;
         this._carrousel = false;
+        this._label = '';
     }
 
     static get observedAttributes() {
-        return ['steps-data', 'current-step', 'carrousel'];
+        return ['steps-data', 'current-step', 'carrousel', 'label'];
     }
 
     connectedCallback() {
@@ -40,6 +41,9 @@ class SpinBoxWidgetElement extends HTMLElement {
         } else if (name === 'carrousel') {
             this._carrousel = newValue === 'true';
             this._update();
+        } else if (name === 'label') {
+            this._label = newValue ?? '';
+            this._render();
         }
     }
 
@@ -65,6 +69,8 @@ class SpinBoxWidgetElement extends HTMLElement {
     }
 
     _render() {
+        const hasLabel = !!this._label;
+
         const style = document.createElement('style');
         style.textContent = `
             :host {
@@ -90,15 +96,38 @@ class SpinBoxWidgetElement extends HTMLElement {
                 justify-content: center;
                 box-sizing: border-box;
             }
-            .text-input {
+            .input-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-end;
                 height: 100%;
                 width: var(--spin-box-input-width, 4ch);
+            }
+            .spin-box-label {
+                height: 40%;
+                width: 100%;
+                display: block;
+                font-size: 0.6em;
+                line-height: 1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ".";
+                box-sizing: border-box;
+                margin-bottom: 1px;
+            }
+            .text-input {
+                width: 100%;
                 text-align: center;
                 border: 1px solid var(--spin-box-border-color, #ccc);
                 border-radius: var(--spin-box-border-radius, 4px);
                 font: inherit;
                 box-sizing: border-box;
                 padding: var(--spin-box-input-padding, 0 2px);
+                ${ hasLabel
+                ? 'height: 75%; font-size: 0.75em;'
+                : 'height: 100%;'
+                }
             }
         `;
 
@@ -115,12 +144,24 @@ class SpinBoxWidgetElement extends HTMLElement {
         prevContainer.addEventListener('click', this._handlePrev);
         inner.appendChild(prevContainer);
 
-        // Text input
+        // Text input (wrapped so a label can stack above it)
+        const inputWrapper = document.createElement('div');
+        inputWrapper.className = 'input-wrapper';
+
+        if (hasLabel) {
+            const labelEl = document.createElement('span');
+            labelEl.className = 'spin-box-label';
+            labelEl.textContent = this._label;
+            labelEl.title = this._label;
+            inputWrapper.appendChild(labelEl);
+        }
+
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'text-input';
         input.addEventListener('keydown', this._handleInputKeydown);
-        inner.appendChild(input);
+        inputWrapper.appendChild(input);
+        inner.appendChild(inputWrapper);
 
         // Next icon
         const nextContainer = document.createElement('div');
