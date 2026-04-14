@@ -108,6 +108,7 @@ class SpinBoxWidgetElement extends HTMLElement {
                 height: 40%;
                 width: 100%;
                 display: block;
+                text-align: center;
                 font-size: 0.6em;
                 line-height: 1;
                 white-space: nowrap;
