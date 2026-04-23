@@ -95,6 +95,8 @@ class SpinBoxWidgetElement extends HTMLElement {
                 align-items: center;
                 justify-content: center;
                 box-sizing: border-box;
+                user-select: none;
+                -webkit-user-select: none;
             }
             .input-wrapper {
                 display: flex;
@@ -116,6 +118,8 @@ class SpinBoxWidgetElement extends HTMLElement {
                 text-overflow: ".";
                 box-sizing: border-box;
                 margin-bottom: 1px;
+                user-select: none;
+                -webkit-user-select: none;
             }
             .text-input {
                 width: 100%;
@@ -125,10 +129,10 @@ class SpinBoxWidgetElement extends HTMLElement {
                 font: inherit;
                 box-sizing: border-box;
                 padding: var(--spin-box-input-padding, 0 2px);
-                ${ hasLabel
+                ${hasLabel
                 ? 'height: 75%; font-size: 0.75em;'
                 : 'height: 100%;'
-                }
+            }
             }
         `;
 

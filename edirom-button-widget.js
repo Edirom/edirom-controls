@@ -58,6 +58,8 @@ class ButtonWidgetElement extends HTMLElement {
                 border-radius: 4px;
                 background-color: var(--secondary-color, #ffffff00);
                 padding: var(--button-widget-padding, 2px);
+                user-select: none;
+                -webkit-user-select: none;
             }
         `;
 
