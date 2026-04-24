@@ -57,6 +57,7 @@ class ButtonWidgetElement extends HTMLElement {
                 height: 100%;
                 border-radius: 4px;
                 background-color: var(--secondary-color, #ffffff00);
+                transition: background-color 0.2s ease;
                 padding: var(--button-widget-padding, 2px);
                 user-select: none;
                 -webkit-user-select: none;
